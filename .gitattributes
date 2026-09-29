@@ -1,0 +1,9 @@
+# Keep the working tree LF everywhere. `scripts/validate-plugin.mjs` and Codex
+# both parse these files as text; a CRLF checkout used to break frontmatter detection.
+* text=auto eol=lf
+
+*.md    text eol=lf
+*.mjs   text eol=lf
+*.json  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ${{ fromJson(vars.RUNNER_HOST && format('["self-hosted","{0}","light"]', vars.RUNNER_HOST) || '["ubuntu-latest"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate plugin structure
+        run: node scripts/validate-plugin.mjs
+
+      # Pinned on purpose: an unpinned install lets an upstream CLI release turn this
+      # job red with no change in this repo. Bump it deliberately, after a local
+      # install test on the new version.
+      - name: Install the Codex CLI
+        run: npm install -g @openai/codex@0.156.1
+
+      # Codex has no `plugin validate` command, so the real gate is an install into a
+      # throwaway CODEX_HOME. None of these steps need a login.
+      - name: Install the plugin from this repo's marketplace
+        env:
+          CODEX_HOME: ${{ runner.temp }}/codex-home
+        run: |
+          mkdir -p "$CODEX_HOME"
+          codex --version
+          codex plugin marketplace add ./
+          codex plugin add yes2sdk@yes2games
+          version=$(node -p "require('./.codex-plugin/plugin.json').version")
+          root="$CODEX_HOME/plugins/cache/yes2games/yes2sdk/$version"
+          for d in skills/*/; do
+            test -f "$root/${d}SKILL.md" || { echo "::error::installed plugin is missing ${d}SKILL.md"; exit 1; }
+          done
+          codex mcp list | tee mcp.txt
+          grep -q 'yes2sdk .*https://mcp.yes2games.com/mcp' mcp.txt || { echo "::error::yes2sdk MCP server was not registered"; exit 1; }

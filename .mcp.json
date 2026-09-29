@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "yes2sdk": {
+      "type": "http",
+      "url": "https://mcp.yes2games.com/mcp"
+    }
+  }
+}
