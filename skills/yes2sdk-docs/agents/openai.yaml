@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yes2SDK docs"
+  short_description: "Search the Yes2SDK documentation"
+  default_prompt: "Use $yes2sdk-docs to look up rewarded ads in the Yes2SDK docs."

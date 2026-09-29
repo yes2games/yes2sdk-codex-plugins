@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Yes2SDK"
+  short_description: "Detect the engine and add Yes2SDK to the project"
+  default_prompt: "Use $yes2sdk-install to set up Yes2SDK in this project."

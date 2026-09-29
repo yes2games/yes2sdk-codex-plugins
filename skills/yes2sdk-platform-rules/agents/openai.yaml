@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yes2SDK platform rules"
+  short_description: "Cross-platform rules that keep a build from being rejected"
+  default_prompt: "Use $yes2sdk-platform-rules to check what breaks if I ship this to every platform."

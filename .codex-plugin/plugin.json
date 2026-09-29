@@ -1,0 +1,43 @@
+{
+  "name": "yes2sdk",
+  "version": "0.1.0",
+  "description": "One integration ships your HTML5 game to every supported web game platform. Install once, and Codex knows the whole SDK.",
+  "author": {
+    "name": "Yes2Games",
+    "email": "developer.support@yes2games.com",
+    "url": "https://developer.yes2games.com"
+  },
+  "homepage": "https://developer.yes2games.com",
+  "repository": "https://github.com/yes2games/yes2sdk-codex-plugin",
+  "license": "MIT",
+  "keywords": [
+    "yes2sdk",
+    "html5-games",
+    "webgl",
+    "game-publishing",
+    "poki",
+    "crazygames",
+    "yandex-games",
+    "gamedistribution",
+    "youtube-playables",
+    "unity",
+    "defold",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Yes2SDK",
+    "shortDescription": "Integrate and verify HTML5 games for every web game platform",
+    "longDescription": "Registers the hosted Yes2SDK MCP server and adds skills that install the SDK, scaffold the unified init and ad loop, verify a WebGL build against Poki, CrazyGames, Yandex Games, GameDistribution and YouTube Playables rules, and diagnose integration failures.",
+    "developerName": "Yes2Games",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://developer.yes2games.com",
+    "defaultPrompt": [
+      "Set up Yes2SDK in this project",
+      "Verify my WebGL build in ./build against every platform",
+      "My rewarded ad plays but the reward never lands"
+    ]
+  }
+}

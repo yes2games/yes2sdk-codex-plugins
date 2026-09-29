@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify build"
+  short_description: "Check a WebGL build against platform rejection rules"
+  default_prompt: "Use $yes2sdk-verify to check my extracted WebGL build against every platform."

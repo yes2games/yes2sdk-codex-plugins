@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose Yes2SDK"
+  short_description: "Route a symptom or failed rule to the right fix"
+  default_prompt: "Use $yes2sdk-diagnose to find out why this Yes2SDK integration is failing."
