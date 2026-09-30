@@ -11,7 +11,7 @@ Yes2SDK MCP, so there is no local server to build or run.
 ## Install
 
 ```bash
-codex plugin marketplace add yes2games/yes2sdk-codex-plugin
+codex plugin marketplace add yes2games/yes2sdk-codex-plugins
 codex plugin add yes2sdk@yes2games
 codex mcp list        # confirm the yes2sdk server is listed
 ```
@@ -80,7 +80,7 @@ server is upgraded in place, so no action is normally needed.
 A mismatch shows up as a symptom: a skill fails because an MCP tool is missing or its
 arguments were rejected. Upgrade the plugin first (`codex plugin marketplace upgrade`).
 If it still fails, open an issue at
-https://github.com/yes2games/yes2sdk-codex-plugin/issues with what you asked and the
+https://github.com/yes2games/yes2sdk-codex-plugins/issues with what you asked and the
 error text.
 
 ### Running the MCP on your own machine
