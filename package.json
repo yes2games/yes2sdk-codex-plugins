@@ -1,5 +1,5 @@
 {
-  "name": "yes2sdk-codex-plugin",
+  "name": "yes2sdk-codex-plugins",
   "version": "0.1.0",
   "private": true,
   "description": "Yes2SDK integration helpers for Codex. Registers the hosted Yes2SDK MCP and adds integrate, verify and diagnose skills.",
@@ -7,10 +7,10 @@
   "homepage": "https://developer.yes2games.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yes2games/yes2sdk-codex-plugin.git"
+    "url": "git+https://github.com/yes2games/yes2sdk-codex-plugins.git"
   },
   "bugs": {
-    "url": "https://github.com/yes2games/yes2sdk-codex-plugin/issues"
+    "url": "https://github.com/yes2games/yes2sdk-codex-plugins/issues"
   },
   "scripts": {
     "validate": "node scripts/validate-plugin.mjs"

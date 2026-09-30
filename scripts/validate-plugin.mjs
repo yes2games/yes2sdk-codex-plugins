@@ -43,6 +43,42 @@ function fmValue(fm, key) {
 }
 const unquote = (v) => v.replace(/^(["'])([\s\S]*)\1$/, "$2");
 
+/** Width and height of a PNG from its IHDR chunk, or null if the file is not a PNG. */
+function pngSize(abs) {
+  const b = fs.readFileSync(abs);
+  if (b.length < 24 || b.toString("latin1", 1, 4) !== "PNG") return null;
+  return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+}
+
+// Directory listing rules: icons and logos are square, at least 48x48, at most 5 MiB,
+// and raster images stay within 4096 px. Remote URLs are left to the submission portal.
+function checkListingImages(ui) {
+  const icons = ["composerIcon", "logo", "logoDark"].filter((k) => ui[k]).map((k) => [k, ui[k]]);
+  const shots = (ui.screenshots ?? []).map((v, n) => [`screenshots[${n}]`, v]);
+  for (const [k, rel] of [...icons, ...shots]) {
+    if (/^https?:/.test(rel)) continue;
+    const where = `${MANIFEST} interface.${k}`;
+    if (!rel.startsWith("./assets/")) fail(`${where}: must live under ./assets/ (got "${rel}")`);
+    if (!exists(rel)) {
+      fail(`${where}: ${rel} does not exist`);
+      continue;
+    }
+    const abs = path.join(ROOT, rel);
+    if (!/\.(png|jpe?g|webp|svg)$/i.test(rel)) fail(`${where}: must be PNG, JPEG, WebP or SVG`);
+    if (fs.statSync(abs).size > 5 * 1024 * 1024) fail(`${where}: over 5 MiB`);
+    const size = /\.png$/i.test(rel) ? pngSize(abs) : null;
+    if (size) {
+      if (size.w > 4096 || size.h > 4096) fail(`${where}: over 4096 px (${size.w}x${size.h})`);
+      if (!k.startsWith("screenshots") && (size.w !== size.h || size.w < 48)) {
+        fail(`${where}: must be square and at least 48x48 (${size.w}x${size.h})`);
+      }
+    }
+  }
+  for (const k of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
+    if (ui[k] && !ui[k].startsWith("https://")) fail(`${MANIFEST} interface.${k}: must be an https URL`);
+  }
+}
+
 // 1. Plugin manifest. Codex CLI 0.156 installs from `.codex-plugin/plugin.json`.
 const MANIFEST = ".codex-plugin/plugin.json";
 const plugin = readJson(MANIFEST);
@@ -60,6 +96,7 @@ if (plugin) {
     else if (!exists(plugin[k])) fail(`${MANIFEST}: "${k}" points at ${plugin[k]}, which does not exist`);
   }
   if (!plugin.interface?.displayName) fail(`${MANIFEST}: missing "interface.displayName"`);
+  checkListingImages(plugin.interface ?? {});
 }
 
 // 2. package.json duplicates version/license; pin them and keep it private.

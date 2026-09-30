@@ -8,7 +8,7 @@
     "url": "https://developer.yes2games.com"
   },
   "homepage": "https://developer.yes2games.com",
-  "repository": "https://github.com/yes2games/yes2sdk-codex-plugin",
+  "repository": "https://github.com/yes2games/yes2sdk-codex-plugins",
   "license": "MIT",
   "keywords": [
     "yes2sdk",
@@ -32,8 +32,17 @@
     "longDescription": "Registers the hosted Yes2SDK MCP server and adds skills that install the SDK, scaffold the unified init and ad loop, verify a WebGL build against Poki, CrazyGames, Yandex Games, GameDistribution and YouTube Playables rules, and diagnose integration failures.",
     "developerName": "Yes2Games",
     "category": "Developer Tools",
-    "capabilities": ["Interactive", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
     "websiteURL": "https://developer.yes2games.com",
+    "supportURL": "https://developer.yes2games.com",
+    "privacyPolicyURL": "https://developer.yes2games.com/privacy-policy",
+    "termsOfServiceURL": "https://developer.yes2games.com/terms",
+    "brandColor": "#8E3DA4",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
     "defaultPrompt": [
       "Set up Yes2SDK in this project",
       "Verify my WebGL build in ./build against every platform",

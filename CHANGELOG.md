@@ -6,6 +6,20 @@ All notable changes to this plugin. Format follows
 
 ## [Unreleased]
 
+### Added
+
+- Listing metadata for the plugin directory: Yes2Games logo (`assets/logo.png`) as the
+  logo and composer icon, brand color, support, privacy policy and terms of service
+  URLs. README gains a Support section.
+- The validator checks listing images (square, at least 48x48, within 5 MiB and
+  4096 px, under `./assets/`) and that listing URLs are https.
+
+### Changed
+
+- Repository renamed to `yes2games/yes2sdk-codex-plugins`. Install with
+  `codex plugin marketplace add yes2games/yes2sdk-codex-plugins`; the old name still
+  redirects.
+
 ## [0.1.0] - 2026-09-30
 
 First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
@@ -15,7 +29,7 @@ First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
 - `.codex-plugin/plugin.json` manifest and `.mcp.json` registering the hosted
   `yes2sdk` MCP server (`https://mcp.yes2games.com/mcp`).
 - Repo marketplace at `.agents/plugins/marketplace.json`, so
-  `codex plugin marketplace add yes2games/yes2sdk-codex-plugin` works.
+  `codex plugin marketplace add yes2games/yes2sdk-codex-plugins` works.
 - Skills: `yes2sdk-install`, `yes2sdk-integrate`, `yes2sdk-verify`,
   `yes2sdk-diagnose` (with its tool-routing reference), `yes2sdk-platform-rules` and
   `yes2sdk-docs`, covering all 11 MCP tools.
@@ -30,4 +44,4 @@ First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
 - `/integrate-all` and `/yes2sdk-docs` are the `yes2sdk-integrate` and `yes2sdk-docs`
   skills. `yes2sdk-integrate` has implicit invocation turned off because it writes code.
 
-[0.1.0]: https://github.com/yes2games/yes2sdk-codex-plugin/releases/tag/v0.1.0
+[0.1.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.1.0
