@@ -108,7 +108,9 @@ codex plugin add yes2sdk@yes2games
 codex mcp list
 ```
 
-Authoring rules for this repo are in [AGENTS.md](AGENTS.md).
+Authoring rules for this repo are in [AGENTS.md](AGENTS.md). Plugin directory listing
+fields, test cases and release notes are in
+[docs/directory-submission.md](docs/directory-submission.md).
 
 Bumping the version means editing `.codex-plugin/plugin.json` and `package.json`. The
 validator fails if they disagree.
