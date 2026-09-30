@@ -6,7 +6,7 @@ All notable changes to this plugin. Format follows
 
 ## [Unreleased]
 
-## [0.1.0]
+## [0.1.0] - 2026-09-30
 
 First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
 
