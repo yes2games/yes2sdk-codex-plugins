@@ -28,7 +28,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Yes2SDK",
-    "shortDescription": "Integrate and verify HTML5 games for every web game platform",
+    "shortDescription": "Integrate and verify web games",
     "longDescription": "Registers the hosted Yes2SDK MCP server and adds skills that install the SDK, scaffold the unified init and ad loop, verify a WebGL build against Poki, CrazyGames, Yandex Games, GameDistribution and YouTube Playables rules, and diagnose integration failures.",
     "developerName": "Yes2Games",
     "category": "Developer Tools",

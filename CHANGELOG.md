@@ -16,6 +16,9 @@ All notable changes to this plugin. Format follows
 
 ### Changed
 
+- Listing subtitle (`interface.shortDescription`) shortened to "Integrate and verify
+  web games"; the directory caps it at 30 characters. The validator now checks that
+  cap and the starter prompt limits (at most 3, 128 characters each).
 - Repository renamed to `yes2games/yes2sdk-codex-plugins`. Install with
   `codex plugin marketplace add yes2games/yes2sdk-codex-plugins`; the old name still
   redirects.
