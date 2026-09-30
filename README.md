@@ -113,6 +113,11 @@ Authoring rules for this repo are in [AGENTS.md](AGENTS.md).
 Bumping the version means editing `.codex-plugin/plugin.json` and `package.json`. The
 validator fails if they disagree.
 
+## Support
+
+Email developer.support@yes2games.com, or see https://developer.yes2games.com. Bugs in
+the plugin itself go to https://github.com/yes2games/yes2sdk-codex-plugins/issues.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

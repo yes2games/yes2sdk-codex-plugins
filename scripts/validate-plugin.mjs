@@ -74,7 +74,7 @@ function checkListingImages(ui) {
       }
     }
   }
-  for (const k of ["websiteURL", "privacyPolicyURL", "termsOfServiceURL"]) {
+  for (const k of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
     if (ui[k] && !ui[k].startsWith("https://")) fail(`${MANIFEST} interface.${k}: must be an https URL`);
   }
 }

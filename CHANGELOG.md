@@ -9,7 +9,8 @@ All notable changes to this plugin. Format follows
 ### Added
 
 - Listing metadata for the plugin directory: Yes2Games logo (`assets/logo.png`) as the
-  logo and composer icon, brand color, privacy policy and terms of service URLs.
+  logo and composer icon, brand color, support, privacy policy and terms of service
+  URLs. README gains a Support section.
 - The validator checks listing images (square, at least 48x48, within 5 MiB and
   4096 px, under `./assets/`) and that listing URLs are https.
 
