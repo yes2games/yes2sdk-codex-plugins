@@ -97,6 +97,14 @@ if (plugin) {
   }
   if (!plugin.interface?.displayName) fail(`${MANIFEST}: missing "interface.displayName"`);
   checkListingImages(plugin.interface ?? {});
+  // The submission portal rejects a longer subtitle; the manifest is where it comes from.
+  const sub = plugin.interface?.shortDescription;
+  if (!sub) fail(`${MANIFEST}: missing "interface.shortDescription"`);
+  else if (sub.length > 30) fail(`${MANIFEST}: "interface.shortDescription" must be 30 characters or fewer (got ${sub.length})`);
+  for (const [n, prompt] of (plugin.interface?.defaultPrompt ?? []).entries()) {
+    if (prompt.length > 128) fail(`${MANIFEST}: "interface.defaultPrompt[${n}]" must be 128 characters or fewer (got ${prompt.length})`);
+  }
+  if ((plugin.interface?.defaultPrompt ?? []).length > 3) fail(`${MANIFEST}: at most 3 "interface.defaultPrompt" entries`);
 }
 
 // 2. package.json duplicates version/license; pin them and keep it private.
