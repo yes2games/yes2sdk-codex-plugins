@@ -6,6 +6,13 @@ All notable changes to this plugin. Format follows
 
 ## [Unreleased]
 
+### Added
+
+- Listing metadata for the plugin directory: Yes2Games logo (`assets/logo.png`) as the
+  logo and composer icon, brand color, privacy policy and terms of service URLs.
+- The validator checks listing images (square, at least 48x48, within 5 MiB and
+  4096 px, under `./assets/`) and that listing URLs are https.
+
 ## [0.1.0] - 2026-09-30
 
 First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
