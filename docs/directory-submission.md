@@ -103,10 +103,18 @@ the file contents passed inline in the request.
 - **Prompt:** `What are the steps to submit my Unity game to the Apple App Store?`
 - **Why the plugin should not act:** The App Store is a native mobile store, not one of
   Yes2SDK's web platforms (Poki, CrazyGames, Yandex Games, GameDistribution, YouTube
-  Playables). The prompt mentions Unity, which Yes2SDK supports, and the plugin still
+  Playables, Jest). The prompt mentions Unity, which Yes2SDK supports, and the plugin still
   correctly stays out.
 
 ## Release notes
+
+0.2.0:
+
+> Adds Jest. `yes2sdk-verify` checks a build for Jest and lists Jest's manual launch
+> checklist as not yet checked; integration and platform-rules guidance now covers
+> Jest's IAP and subscription model, which has no in-game ads.
+
+0.1.0:
 
 > First release. Registers the hosted Yes2SDK MCP server and adds six skills for Codex:
 > install the SDK, scaffold the unified init and ad loop, verify a WebGL build against

@@ -1,6 +1,6 @@
 {
   "name": "yes2sdk-codex-plugins",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Yes2SDK integration helpers for Codex. Registers the hosted Yes2SDK MCP and adds integrate, verify and diagnose skills.",
   "license": "MIT",

@@ -1,6 +1,6 @@
 ---
 name: yes2sdk-platform-rules
-description: Cross-platform Yes2SDK rules; the yes2sdk MCP is source of truth. Use when integrating Yes2SDK or fixing compliance for Poki, CrazyGames, Yandex, GameDistribution, YouTube.
+description: Cross-platform Yes2SDK rules; the yes2sdk MCP is source of truth. Use when integrating Yes2SDK or fixing compliance for Poki, CrazyGames, Yandex, GameDistribution, YouTube, Jest.
 ---
 
 # Yes2SDK platform rules
@@ -26,6 +26,24 @@ Per-platform rules diverge (Poki's 30s/60s ad timing, CrazyGames' 3-minute floor
 and wrapper options, Yandex pause/resume and locale, GameDistribution's `gameId` and
 event flow, YouTube's cert-mandatory pause/audio handling). These change. Do not
 rely on this list for compliance decisions.
+
+Jest is the outlier. It is mobile-first and earns from IAP and subscriptions only,
+with no in-game ads. Ad calls stay safe and end in a no-fill, so keep rules 2 and 3
+for the other platforms (Unity reports the no-fill through `onError` with no
+`afterAd`, so resume there too), but no progression may depend on a rewarded ad.
+Its own checks are a manual launch checklist that `yes2sdk:validate_integration`
+does not grade: save guest progress before any login prompt; schedule a D1 to D7
+notification sequence with images once the player registers; recover and complete
+incomplete purchases at startup; never re-offer a subscription the player holds;
+show `auth.showRegistrationPrompt` to guests only, with Automatic login reminders
+(`jest.autoLoginReminders: false`) turned off so there is one prompt; save in the
+`exitRequested` handler. Fetch the checklist with `yes2sdk:get_platform_requirements`
+rather than working from this paragraph.
+
+Jest needs Core 2.10.0, Unity 2.11.0 or Defold 1.8.0 or later (take the exact pins
+from `yes2sdk:get_install_instructions`); the Construct addon does not support it
+yet. The Yes2Games team handles publishing and every Jest Developer Console step;
+the studio's job is a game that meets these rules when it requests publish.
 
 For the authoritative, current rule set, call the **yes2sdk MCP**:
 
