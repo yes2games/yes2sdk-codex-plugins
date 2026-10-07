@@ -37,7 +37,8 @@ skill name, or run `/skills`.
 
 `yes2sdk-verify` takes the path to your **extracted** WebGL build; if you leave it off it
 asks once. An Inspector event log can be added for the behavioral checks. Without one,
-the report says which checks did not run.
+the report says which checks did not run. For Jest, the automated checks cover only the
+universal rules, so the report lists Jest's manual launch checklist as not yet checked.
 
 ## MCP tool coverage
 
@@ -46,11 +47,11 @@ All 11 `yes2sdk` MCP tools are reachable:
 | Tool | Fronted by |
 |---|---|
 | `detect_sdk` | `yes2sdk-install`, `yes2sdk-integrate` |
-| `get_install_instructions` | `yes2sdk-install`, `yes2sdk-integrate` |
+| `get_install_instructions` | `yes2sdk-install`, `yes2sdk-integrate`, `yes2sdk-platform-rules` |
 | `get_quickstart` | `yes2sdk-integrate`, `yes2sdk-docs`, `yes2sdk-platform-rules` |
 | `get_api_reference` | `yes2sdk-integrate`, `yes2sdk-docs`, `yes2sdk-platform-rules` |
 | `search_docs` | `yes2sdk-docs` |
-| `get_platform_requirements` | `yes2sdk-platform-rules` |
+| `get_platform_requirements` | `yes2sdk-platform-rules`, `yes2sdk-verify` |
 | `validate_integration` | `yes2sdk-verify`, `yes2sdk-integrate`, `yes2sdk-platform-rules` |
 | `get_compliance_rule` | `yes2sdk-diagnose`, `yes2sdk-verify` |
 | `troubleshoot` | `yes2sdk-diagnose` |
@@ -74,7 +75,7 @@ detection. `yes2sdk-integrate` follows both rather than restating them.
 
 ### MCP server version
 
-Built against `yes2sdk` MCP server **0.3.x**, expecting `>=0.3.0 <1.0.0`. The hosted
+Built against `yes2sdk` MCP server **0.3.2**, expecting `>=0.3.2 <1.0.0`. The hosted
 server is upgraded in place, so no action is normally needed.
 
 A mismatch shows up as a symptom: a skill fails because an MCP tool is missing or its

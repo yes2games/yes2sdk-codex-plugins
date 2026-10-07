@@ -1,6 +1,6 @@
 ---
 name: yes2sdk-verify
-description: Validates a Yes2SDK WebGL build against one platform or all of them (Poki, CrazyGames, Yandex, GameDistribution, YouTube). Use before an upload, or when asked whether a build would be rejected.
+description: Validates a Yes2SDK WebGL build against one platform or all of them (Poki, CrazyGames, Yandex, GameDistribution, YouTube, Jest). Use before an upload, or when asked whether a build would be rejected.
 ---
 
 # Verifying a Yes2SDK build
@@ -12,7 +12,7 @@ Edit the procedure here, not in the skills that call it.
 ## Inputs
 
 - **Platform**: one of `poki`, `crazygames`, `yandex`, `gamedistribution`,
-  `youtube`, or `all`. Take it from the request ("verify for Poki", "check every
+  `youtube`, `jest`, or `all`. Take it from the request ("verify for Poki", "check every
   platform"). When the request names none, use `all`.
 - **Build**: the user's **extracted** WebGL build folder. If the request gives no
   path, ask once, then reuse the same build for every platform in this run.
@@ -35,8 +35,12 @@ Edit the procedure here, not in the skills that call it.
    the same inline build.
 4. For any FAIL whose fix is not obvious from its hint, call
    `yes2sdk:get_compliance_rule` with the rule id before reporting.
-5. Report as below.
-6. Never soften or reinterpret a FAIL, and never mark one resolved by reasoning.
+5. Some platforms are graded partly by hand. For Jest, `yes2sdk:validate_integration`
+   runs only the universal rules, and the platform's own requirements are a manual
+   launch checklist. Call `yes2sdk:get_platform_requirements` for that platform and
+   list each manual item as not checked. A clean automated run there is never a pass.
+6. Report as below.
+7. Never soften or reinterpret a FAIL, and never mark one resolved by reasoning.
    The rule set is the platform's, not this plugin's; if a finding looks wrong,
    report it as returned and say so.
 
@@ -58,7 +62,8 @@ fails many platforms and is one fix, not one finding each.
    - **Warnings**: after the FAILs, briefly.
 4. Any checks that could not run, and why. A sweep with no event log did not run
    the behavioral rules at all, and reporting that as a clean pass is the worst
-   failure this skill can have.
+   failure this skill can have. The same goes for a platform whose requirements
+   include manual checks (Jest today): list those as not checked, never as passed.
 
 ## What each platform usually rejects on
 
@@ -72,3 +77,4 @@ the rule set; `yes2sdk:validate_integration` is authoritative.
 | `yandex` | `startGameAsync()` missing, so the loading screen never dismisses; pause/resume not handled, so audio keeps playing during ads; `gameplayStop()` missing before ads; locale not read from `session.getLocale()`. |
 | `gamedistribution` | `gameId` not set before the SDK loads; mute/pause not wired to `beforeAd`/`afterAd`; rewards granted in `afterAd` instead of `adViewed`; external scripts beyond GD's own SDK. |
 | `youtube` | Strictest, and the checks are cert-mandatory: `startGameAsync()` not gating `gameReady()` (called during loading); `pause` not stopping game loop, audio and network; audio state not honored (`session.isAudioEnabled()` + `audioEnabledChange`); external scripts (CSP sandbox); cloud saves over the 3 MiB cap. |
+| `jest` | Mobile-first, paid by IAP and subscriptions only, with no in-game ads: progression gated on a rewarded ad; guest progress not saved before a login prompt; no D1 to D7 notification sequence with images for registered players; incomplete purchases not recovered at startup; a subscription the player already holds offered again; two login prompts (Automatic login reminders, `jest.autoLoginReminders`, left on next to the game's own `auth.showRegistrationPrompt`); nothing saved in `exitRequested`; root-absolute asset paths. |

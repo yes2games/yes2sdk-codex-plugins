@@ -82,7 +82,9 @@ it lists.
 
 **`yes2sdk:get_compliance_rule`** takes the rule id off a finding, whose own hint
 is only a summary. Id prefixes tell you the scope: `U-` universal, `P-` Poki, `CG-`
-CrazyGames, `Y-` Yandex, `GD-` GameDistribution, `YT-` YouTube.
+CrazyGames, `Y-` Yandex, `GD-` GameDistribution, `YT-` YouTube. Jest has no
+platform-specific rule ids yet: its requirements are a manual checklist from
+`yes2sdk:get_platform_requirements`, and only `U-` rules run against a Jest build.
 
 **`yes2sdk:validate_integration`** has static and behavioral modes that are
 independent, and either can run alone. The static checks need the build; the
