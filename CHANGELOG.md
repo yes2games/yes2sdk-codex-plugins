@@ -4,10 +4,18 @@ All notable changes to this plugin. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-07
+
+Adds Jest as a supported platform.
 
 ### Added
 
+- Jest in `yes2sdk-verify` (`jest` is a platform name, and is part of `all`),
+  `yes2sdk-integrate`, `yes2sdk-platform-rules` and the diagnose tool-routing notes.
+  `yes2sdk-integrate` adds the Jest calls (guest save, registration prompt,
+  notifications, purchase recovery, subscriptions, exit save) and never gates
+  progression on a rewarded ad.
+- `jest` keyword, and Jest in the listing's long description.
 - Listing metadata for the plugin directory: Yes2Games logo (`assets/logo.png`) as the
   logo and composer icon, brand color, support, privacy policy and terms of service
   URLs. README gains a Support section.
@@ -16,6 +24,10 @@ All notable changes to this plugin. Format follows
 
 ### Changed
 
+- `yes2sdk-verify` calls `get_platform_requirements` for a platform with manual checks
+  and reports them as not checked, so a clean automated run never reads as a pass.
+- README records MCP server `0.3.2` (`>=0.3.2 <1.0.0`), the version that serves the
+  `jest` platform.
 - Listing subtitle (`interface.shortDescription`) shortened to "Integrate and verify
   web games"; the directory caps it at 30 characters. The validator now checks that
   cap and the starter prompt limits (at most 3, 128 characters each).
@@ -47,4 +59,5 @@ First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
 - `/integrate-all` and `/yes2sdk-docs` are the `yes2sdk-integrate` and `yes2sdk-docs`
   skills. `yes2sdk-integrate` has implicit invocation turned off because it writes code.
 
+[0.2.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.2.0
 [0.1.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.1.0

@@ -1,6 +1,6 @@
 {
   "name": "yes2sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "One integration ships your HTML5 game to every supported web game platform. Install once, and Codex knows the whole SDK.",
   "author": {
     "name": "Yes2Games",
@@ -20,6 +20,7 @@
     "yandex-games",
     "gamedistribution",
     "youtube-playables",
+    "jest",
     "unity",
     "defold",
     "mcp"
@@ -29,7 +30,7 @@
   "interface": {
     "displayName": "Yes2SDK",
     "shortDescription": "Integrate and verify web games",
-    "longDescription": "Registers the hosted Yes2SDK MCP server and adds skills that install the SDK, scaffold the unified init and ad loop, verify a WebGL build against Poki, CrazyGames, Yandex Games, GameDistribution and YouTube Playables rules, and diagnose integration failures.",
+    "longDescription": "Registers the hosted Yes2SDK MCP server and adds skills that install the SDK, scaffold the unified init and ad loop, verify a WebGL build against Poki, CrazyGames, Yandex Games, GameDistribution, YouTube Playables and Jest rules, and diagnose integration failures.",
     "developerName": "Yes2Games",
     "category": "Developer Tools",
     "capabilities": [
