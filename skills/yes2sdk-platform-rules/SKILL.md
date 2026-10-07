@@ -42,8 +42,8 @@ rather than working from this paragraph.
 
 Jest needs Core 2.10.0, Unity 2.11.0 or Defold 1.8.0 or later (take the exact pins
 from `yes2sdk:get_install_instructions`); the Construct addon does not support it
-yet. The Yes2Games team builds the Jest zip once a publish request is approved, and
-the studio uploads it in the Jest Developer Console.
+yet. The Yes2Games team handles publishing and every Jest Developer Console step;
+the studio's job is a game that meets these rules when it requests publish.
 
 For the authoritative, current rule set, call the **yes2sdk MCP**:
 
