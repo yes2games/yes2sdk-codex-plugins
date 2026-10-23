@@ -4,6 +4,36 @@ All notable changes to this plugin. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-23
+
+Adds uploading a build to the Yes2 dashboard, through the authenticated dashboard
+tools in the `yes2sdk` MCP.
+
+### Added
+
+- `yes2sdk-upload` skill, the single source of the upload procedure, with
+  `agents/openai.yaml` (`allow_implicit_invocation: false`, since it uploads). It
+  checks the key with `list_games`, picks the game or creates it with `create_game`,
+  builds a JS/TS project with `npm run build` (or asks for the Unity/Defold WebGL/HTML5
+  output folder), zips it with `index.html` at the zip root, can run `$yes2sdk-verify`
+  first, then calls `prepare_upload`, runs the returned `curl` PUT as given, calls
+  `finalize_upload` and polls `get_build_status` until the build is `ready` or
+  `failed`. It reports the `inspectorUrl` and any upload warnings, and says that
+  publishing to platforms stays an admin action on the dashboard. It never reads,
+  prints or asks for the key.
+- `list_games`, `create_game`, `prepare_upload`, `finalize_upload` and
+  `get_build_status` in the README coverage table (16 tools) and in `AGENTS.md`.
+- README section on setting `YES2_API_KEY` and the `~/.codex/config.toml` entry that
+  sends it (`bearer_token_env_var`).
+- Upload in the listing's long description, the 0.4.0 release note, and the dashboard
+  tools' hints in `docs/directory-submission.md`.
+
+### Unchanged on purpose
+
+- `.mcp.json` still registers the server with no auth. Codex documents only `type`,
+  `url` and OAuth for a plugin's MCP file, and `bearer_token_env_var` there would stop
+  the server from starting for every user without the variable, docs tools included.
+
 ## [0.3.0] - 2026-10-23
 
 Adds JavaScript/TypeScript (Phaser, three.js, vanilla) as a supported engine, through

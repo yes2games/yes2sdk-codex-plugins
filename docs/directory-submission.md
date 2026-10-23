@@ -17,7 +17,7 @@ actually did.
 | Support | https://developer.yes2games.com (email: developer.support@yes2games.com) |
 | Privacy policy | https://developer.yes2games.com/privacy-policy |
 | Terms of service | https://developer.yes2games.com/terms |
-| MCP server | https://mcp.yes2games.com/mcp (all 11 tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`) |
+| MCP server | https://mcp.yes2games.com/mcp (the 11 docs and validation tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`; once yes2sdk-mcp#103 is deployed, the 5 dashboard tools carry `destructiveHint: false`, `openWorldHint: true`, and `readOnlyHint: true` only on `list_games` and `get_build_status`) |
 | Logo and icon | `assets/logo.png` (512x512 PNG) |
 | Starter prompts | the three in `.codex-plugin/plugin.json` `interface.defaultPrompt` |
 
@@ -28,6 +28,14 @@ writes anything, changes state on the server or elsewhere, or reaches out to thi
 systems on the user's behalf, so all are read-only, non-destructive and closed-world.
 The hosted server has no disk access; `detect_sdk` and `validate_integration` read only
 the file contents passed inline in the request.
+
+The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
+`get_build_status`) are the exception. They call the Yes2 dashboard API with the user's
+own API key, so they are open-world, and `create_game`, `prepare_upload` and
+`finalize_upload` change the studio's data on the dashboard (a new game, a reserved
+version, a registered build). None deletes or overwrites anything. Without a key they
+return setup steps and call nothing. The test cases below do not cover them, since a
+reviewer has no dashboard key; the upload skill only runs when asked for by name.
 
 ## Positive test cases
 
@@ -107,6 +115,13 @@ the file contents passed inline in the request.
   correctly stays out.
 
 ## Release notes
+
+0.4.0:
+
+> Adds `yes2sdk-upload`, which uploads a built game to the Yes2 dashboard with the
+> user's own API key and returns its Inspector link. It picks or creates the game,
+> zips the build, runs the presigned upload from the user's machine and waits for
+> processing. Publishing to platforms stays an admin action on the dashboard.
 
 0.3.0:
 
