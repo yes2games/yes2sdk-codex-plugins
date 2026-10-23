@@ -108,6 +108,13 @@ the file contents passed inline in the request.
 
 ## Release notes
 
+0.3.0:
+
+> Adds JavaScript/TypeScript (Phaser, three.js, vanilla) through the `@yes2games/js`
+> package. Install and detection cover JS projects, integration wires the dev-only mock
+> import and the canvas marker, and verify builds the project with Vite before checking
+> it. The SDK is never bundled; the dashboard injects it at upload.
+
 0.2.0:
 
 > Adds Jest. `yes2sdk-verify` checks a build for Jest and lists Jest's manual launch

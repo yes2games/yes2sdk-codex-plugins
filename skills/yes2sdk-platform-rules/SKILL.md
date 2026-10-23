@@ -9,6 +9,11 @@ Yes2SDK is one unified API across every supported platform. Write the integratio
 once and gate platform-specific features with `isSupported()` so unsupported
 features no-op. Never call a platform SDK directly. Never invent SDK methods.
 
+The same rules hold on every engine: Unity, Defold and JavaScript/TypeScript (Phaser,
+three.js, vanilla, through `@yes2games/js`). On JS the game is built without the SDK
+and the dashboard injects `window.Yes2SDK` at upload, so the SDK is never bundled or
+loaded with a tag of the game's own.
+
 ## Highest-leverage rules (apply everywhere)
 
 1. `await initializeAsync()` before any other SDK call. Call `startGameAsync()`

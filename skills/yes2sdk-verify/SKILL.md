@@ -1,6 +1,6 @@
 ---
 name: yes2sdk-verify
-description: Validates a Yes2SDK WebGL build against one platform or all of them (Poki, CrazyGames, Yandex, GameDistribution, YouTube, Jest). Use before an upload, or when asked whether a build would be rejected.
+description: Validates a Yes2SDK WebGL or JavaScript/TypeScript build against one platform or all of them (Poki, CrazyGames, Yandex, GameDistribution, YouTube, Jest). Use before an upload, or when asked whether a build would be rejected.
 ---
 
 # Verifying a Yes2SDK build
@@ -14,8 +14,14 @@ Edit the procedure here, not in the skills that call it.
 - **Platform**: one of `poki`, `crazygames`, `yandex`, `gamedistribution`,
   `youtube`, `jest`, or `all`. Take it from the request ("verify for Poki", "check every
   platform"). When the request names none, use `all`.
-- **Build**: the user's **extracted** WebGL build folder. If the request gives no
-  path, ask once, then reuse the same build for every platform in this run.
+- **Build**: the user's **extracted** WebGL/HTML5 build folder. If the request
+  gives no path, ask once, then reuse the same build for every platform in this
+  run. On a JavaScript/TypeScript project, build it first with the project's own
+  build script (Vite, `base: './'`) and verify the output folder (`dist/` unless
+  the config says otherwise), never the source tree or a dev-server page, which
+  carry the mock instead of what ships. The build should contain no SDK of its own;
+  the dashboard injects it at upload, and `yes2sdk:validate_integration` checks
+  this.
 - **Event log** (optional): an exported Inspector event log.
 
 ## Procedure

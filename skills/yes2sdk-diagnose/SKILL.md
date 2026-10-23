@@ -36,6 +36,15 @@ Check the feature exists on that platform. `yes2sdk:get_platform_capabilities`
 answers it. An `isSupported()` guard returning false is the SDK working correctly,
 not a bug. The fix is to handle the unsupported path, not to force the call.
 
+## JavaScript/TypeScript projects
+
+Locally, `window.Yes2SDK` is the mock from `@yes2games/js/mock` (platform `debug`),
+not the SDK, so a symptom seen only under `npm run dev` may be the mock's settings
+rather than the game. Say which one the user is running before routing. If the mock
+shows up in a built `dist/`, or the build carries its own copy of the SDK, that is a
+build problem: route it through `$yes2sdk-verify`, since the dashboard injects the
+real SDK at upload.
+
 ## Reference
 
 `references/tool-routing.md` covers all 11 `yes2sdk` MCP tools: which question each

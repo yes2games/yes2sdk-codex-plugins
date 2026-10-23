@@ -8,6 +8,13 @@ MCP server, plus skills that install the SDK, scaffold the integration, verify a
 against platform rules and diagnose failures. Installing it registers the hosted
 Yes2SDK MCP, so there is no local server to build or run.
 
+Works with Unity, Defold and JavaScript/TypeScript games (Phaser, three.js or vanilla).
+On JavaScript/TypeScript you write against `window.Yes2SDK` with the
+[`@yes2games/js`](https://www.npmjs.com/package/@yes2games/js) package (runtime helpers,
+types, a local-dev mock), build with Vite, and upload the plain build; the dashboard
+injects the real SDK, so you never bundle it. See
+https://developer.yes2games.com/docs/javascript.
+
 ## Install
 
 ```bash
@@ -28,15 +35,16 @@ skill name, or run `/skills`.
 
 | Skill | What it does | Say something like |
 |---|---|---|
-| `yes2sdk-install` | Detects the engine and install state, then gives the version-pinned install steps. Runs before any Yes2SDK code is written. | *"Set up Yes2SDK in this project."* |
-| `yes2sdk-integrate` | Scaffolds the unified init and ad loop with `isSupported()` guards. It writes code, so it only runs when you ask for it by name. | *"$yes2sdk-integrate for poki"* |
-| `yes2sdk-verify` | Checks an extracted WebGL build against one platform or all of them. For all platforms it groups findings by cause, so one missing `gameplayStop()` reads as one fix. | *"Verify ./build/webgl for YouTube."* / *"Check this build against every platform."* |
+| `yes2sdk-install` | Detects the engine (Unity, Defold, or JavaScript/TypeScript with Phaser, three.js or Vite) and install state, then gives the version-pinned install steps. Runs before any Yes2SDK code is written. | *"Set up Yes2SDK in this project."* |
+| `yes2sdk-integrate` | Scaffolds the unified init and ad loop with `isSupported()` guards. On JavaScript/TypeScript it also wires the dev-only mock import. It writes code, so it only runs when you ask for it by name. | *"$yes2sdk-integrate for poki"* |
+| `yes2sdk-verify` | Checks an extracted WebGL or JavaScript/TypeScript build against one platform or all of them. For all platforms it groups findings by cause, so one missing `gameplayStop()` reads as one fix. | *"Verify ./build/webgl for YouTube."* / *"Check this build against every platform."* |
 | `yes2sdk-diagnose` | Routes a symptom, a failed rule id or a "does this platform support X" question to the right tool. | *"The rewarded ad plays but the reward never lands."* |
 | `yes2sdk-platform-rules` | Cross-platform rules for any integration or compliance work, deferring to the MCP for the authoritative rule set. | *"What breaks if I ship this to Yandex and Poki?"* |
 | `yes2sdk-docs` | Searches the Yes2SDK docs. | *"$yes2sdk-docs rewarded ad callbacks"* |
 
-`yes2sdk-verify` takes the path to your **extracted** WebGL build; if you leave it off it
-asks once. An Inspector event log can be added for the behavioral checks. Without one,
+`yes2sdk-verify` takes the path to your **extracted** WebGL/HTML5 build; if you leave it
+off it asks once. On a JavaScript/TypeScript project it builds first with your Vite
+build script and checks the output folder (`dist/`). An Inspector event log can be added for the behavioral checks. Without one,
 the report says which checks did not run. For Jest, the automated checks cover only the
 universal rules, so the report lists Jest's manual launch checklist as not yet checked.
 
