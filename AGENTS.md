@@ -33,6 +33,10 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   `validate_integration` gets `indexHtml`/`fileList`/`jsContents`, not `buildPath`.
 - Adding a tool to the server means adding it to a skill and to the README coverage
   table.
+- SDK naming taught to users: Defold `yes2sdk.*` (Lua), Unity `Yes2SDK.Yes2SDK.*` (C#),
+  JS `Yes2SDK.*` on `window.Yes2SDK`, with the `@yes2games/js` package for helpers,
+  types and the mock. On JS the SDK itself is never installed or bundled (the
+  dashboard injects it), so never teach a step that adds it to the project.
 
 ## Keeping in step with the Claude Code plugin
 

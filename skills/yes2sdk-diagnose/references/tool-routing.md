@@ -52,12 +52,15 @@ check possible; without it that check cannot run.
 **`yes2sdk:detect_sdk`** reports engine, install state, installed version, and the
 steps still required. Engine markers to pass inline: `game.project` (Defold),
 **both** `Packages/manifest.json` and a `ProjectSettings/` file (Unity; one alone
-returns `Engine: unknown`), `package.json` (JS). Inspects only; never modifies.
-`installed: no` is a blocker on Unity and Defold, and the expected permanent state
-on JS, where the runtime is injected into the build at upload time.
+returns `Engine: unknown`), `package.json` plus any `vite.config.*` (JS, where it
+also reports Phaser, three.js and Vite). Inspects only; never modifies. On Unity and
+Defold `installed` is the SDK package. On JS it is `@yes2games/js` (helpers, types,
+mock); the SDK itself is never installed there, because the dashboard injects it
+into the build at upload time.
 
 **`yes2sdk:get_install_instructions`** is version-pinned, so use the returned steps
-rather than a remembered procedure. It reports what to do, not what is already
+rather than a remembered procedure. Engines are `unity`, `defold` and `js` (Phaser,
+three.js and vanilla all take `js`). It reports what to do, not what is already
 done; that is `yes2sdk:detect_sdk`.
 
 **`yes2sdk:get_quickstart`** returns the whole guide for one platform: call

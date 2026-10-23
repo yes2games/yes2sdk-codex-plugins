@@ -12,5 +12,9 @@ description: Searches the Yes2SDK documentation. Use for an open-ended Yes2SDK d
    `yes2sdk:get_quickstart` (a platform guide) or `yes2sdk:get_api_reference` (a
    module's method signatures).
 
+For a JavaScript/TypeScript question (Phaser, three.js, vanilla, `@yes2games/js`, the
+local-dev mock), also point the user at https://developer.yes2games.com/docs/javascript.
+An install question goes to `$yes2sdk-install`, not to search.
+
 A concrete error message or symptom is better answered by the `$yes2sdk-diagnose`
 skill than by keyword search.

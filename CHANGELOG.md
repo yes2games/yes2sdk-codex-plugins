@@ -4,6 +4,37 @@ All notable changes to this plugin. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-10-23
+
+Adds JavaScript/TypeScript (Phaser, three.js, vanilla) as a supported engine, through
+the `@yes2games/js` package.
+
+### Added
+
+- JavaScript/TypeScript in `yes2sdk-install`, `yes2sdk-integrate`, `yes2sdk-verify`,
+  `yes2sdk-diagnose` and its tool-routing notes, `yes2sdk-platform-rules`,
+  `yes2sdk-docs`, the README and the listing's long description.
+  `yes2sdk-integrate` places the JS init, loading and ad calls, routes ads and
+  pause/mute through `@yes2games/js` (or its `/phaser` and `/three` helpers), imports
+  the mock only under `import.meta.env.DEV`, and marks the game canvas
+  `data-yes2-canvas`.
+- `yes2sdk-verify` builds a JS project with its Vite build script before
+  `validate_integration` and checks the output folder, never the source tree or a
+  dev-server page.
+- `yes2sdk-docs` points JavaScript questions at
+  https://developer.yes2games.com/docs/javascript.
+- `javascript`, `typescript`, `phaser` and `threejs` keywords.
+- SDK naming per engine in `AGENTS.md`.
+
+### Changed
+
+- On a JS project, `installed` now means the `@yes2games/js` package, which
+  `get_install_instructions("js")` installs. The SDK itself is still never installed
+  or bundled: the dashboard injects `window.Yes2SDK` at upload. The old wording, that
+  `installed: no` is the expected permanent state on JS, is gone.
+- `yes2sdk-install` passes the root `vite.config.*` to `detect_sdk` alongside
+  `package.json`, so the server can report Phaser, three.js and Vite.
+
 ## [0.2.0] - 2026-10-07
 
 Adds Jest as a supported platform.
@@ -59,5 +90,6 @@ First version, ported from the Yes2SDK Claude Code plugin (0.2.0).
 - `/integrate-all` and `/yes2sdk-docs` are the `yes2sdk-integrate` and `yes2sdk-docs`
   skills. `yes2sdk-integrate` has implicit invocation turned off because it writes code.
 
+[0.3.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.3.0
 [0.2.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.2.0
 [0.1.0]: https://github.com/yes2games/yes2sdk-codex-plugins/releases/tag/v0.1.0
