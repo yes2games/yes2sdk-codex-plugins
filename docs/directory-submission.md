@@ -31,7 +31,7 @@ the file contents passed inline in the request.
 
 The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
 `get_build_status`) are the exception. They call the Yes2 dashboard API with the user's
-own API key, so they are open-world, and `create_game`, `prepare_upload` and
+own API key (sent as `X-Yes2-Api-Key` from the `YES2_API_KEY` env var), so they are open-world, and `create_game`, `prepare_upload` and
 `finalize_upload` change the studio's data on the dashboard (a new game, a reserved
 version, a registered build). None deletes or overwrites anything. Without a key they
 return setup steps and call nothing. The test cases below do not cover them, since a

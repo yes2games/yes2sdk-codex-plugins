@@ -11,8 +11,8 @@ publishing stays an admin action on the dashboard (the studio requests it there,
 a Yes2Games admin reviews and publishes). Say so in the final report.
 
 The plugin wraps the `yes2sdk` MCP, which does the real work. The dashboard tools act
-with the user's own dashboard API key, sent to the server as
-`Authorization: Bearer y2g_...`. The hosted server never reads the zip:
+with the user's own dashboard API key, which the plugin's `.mcp.json` sends from
+`YES2_API_KEY` as the `X-Yes2-Api-Key` header on every request. The hosted server never reads the zip:
 `yes2sdk:prepare_upload` hands back a `curl` command that sends it from the user's
 machine straight to storage.
 
@@ -34,21 +34,11 @@ machine straight to storage.
      Personal API keys**, or a team key from the **Team** page. Copy it.
    - Add `export YES2_API_KEY=y2g_...` to their shell profile (`~/.zshrc`,
      `~/.bashrc`), never to a file in the project and never to a commit.
-   - Tell Codex to send it. The plugin's own server entry cannot carry a key, so they
-     add this to `~/.codex/config.toml`, which takes the place of the plugin's
-     `yes2sdk` entry:
-
-     ```toml
-     [mcp_servers.yes2sdk]
-     url = "https://mcp.yes2games.com/mcp"
-     bearer_token_env_var = "YES2_API_KEY"
-     ```
-
-     With that entry, Codex will not start the `yes2sdk` server at all while
-     `YES2_API_KEY` is unset, docs tools included. Mention it, so a user who later
-     drops the key knows to remove the entry too.
-   - Open a new terminal and restart Codex from it. `codex mcp list` should show
-     `YES2_API_KEY` under Bearer Token Env Var for `yes2sdk`.
+   - Open a new terminal and restart Codex from it. Nothing else is needed: the
+     plugin already sends the variable, and no `config.toml` entry is required.
+   - If they replaced the plugin's server with their own `[mcp_servers.yes2sdk]` entry
+     in `~/.codex/config.toml` (a local server, for example), that entry needs
+     `env_http_headers = { "X-Yes2-Api-Key" = "YES2_API_KEY" }` too.
 2. **Pick the game.** Show the games `yes2sdk:list_games` returned and ask which one
    this build belongs to. If it is not there, offer `yes2sdk:create_game` with the
    name the user gives; `vanilla` is the engine for any JavaScript/TypeScript game

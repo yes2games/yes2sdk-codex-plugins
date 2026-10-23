@@ -42,25 +42,19 @@ with `$yes2sdk-upload`, give Codex your own dashboard API key:
    export YES2_API_KEY=y2g_your_key_here
    ```
 
-3. Add this to `~/.codex/config.toml`:
+3. Open a new terminal and start Codex from it. No `config.toml` entry is needed.
 
-   ```toml
-   [mcp_servers.yes2sdk]
-   url = "https://mcp.yes2games.com/mcp"
-   bearer_token_env_var = "YES2_API_KEY"
-   ```
+The plugin's `.mcp.json` maps the variable onto a header with
+`"env_http_headers": { "X-Yes2-Api-Key": "YES2_API_KEY" }`, so Codex sends the key as
+`X-Yes2-Api-Key` on each request. The server passes it to the dashboard for that
+request only and never stores it. When the variable is unset Codex leaves the header
+out and the server starts as usual, so the docs and validation tools work without a
+key.
 
-   It takes the place of the plugin's own `yes2sdk` entry, and Codex sends the key as
-   `Authorization: Bearer ...` on each request. The server passes it to the dashboard
-   for that request only and never stores it.
-4. Open a new terminal and start Codex from it. `codex mcp list` shows `YES2_API_KEY`
-   under Bearer Token Env Var for `yes2sdk`.
-
-The plugin cannot do step 3 for you. Codex documents only `type`, `url` and OAuth for
-a plugin's MCP file, and with `bearer_token_env_var` set Codex refuses to start the
-server while the variable is unset, which would take the docs tools away from everyone
-without a key. The same applies to your own entry: if you remove `YES2_API_KEY` later,
-remove the entry too.
+`env_http_headers` is documented for `~/.codex/config.toml`, not for a plugin's MCP
+file. Codex accepts it there anyway; this was verified end to end on Codex CLI 0.156.1
+(unset: the server starts and no header is sent; set: the header arrives), and CI
+checks that the installed plugin still carries it.
 
 Without a key the upload tools answer with these setup steps. Codex never needs to see
 the key, so do not paste it into the chat.
@@ -157,8 +151,9 @@ hosted server and only work when the server runs on your machine.
 
 To use a local server, point the `yes2sdk` name at it in `~/.codex/config.toml`, for
 example `http://127.0.0.1:8091/mcp`. The skills work against any server named `yes2sdk`.
-For uploads, add `bearer_token_env_var = "YES2_API_KEY"` to that entry (local HTTP), or
-forward the variable with `env_vars = ["YES2_API_KEY"]` (stdio).
+Your entry replaces the plugin's, so for uploads give it the header too:
+`env_http_headers = { "X-Yes2-Api-Key" = "YES2_API_KEY" }` (local HTTP), or forward the
+variable with `env_vars = ["YES2_API_KEY"]` (stdio).
 
 ## Contributing
 

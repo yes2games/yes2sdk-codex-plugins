@@ -38,14 +38,13 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   fronted by `yes2sdk-upload`. Without a key they return setup steps, so the presence
   check is a call to `list_games`, never a look at the variable. No skill may print,
   echo or `grep` the key, put it in a command, or ask the user to paste it.
-- `.mcp.json` carries no auth on purpose. Codex documents only `type`, `url` and OAuth
-  for a plugin's MCP file. Codex 0.156.1 does parse `bearer_token_env_var` there, but
-  an unset variable then stops the server from starting at all, docs tools included.
-  `env_http_headers` skips an unset variable, but it sends the value as is, so the
-  variable would have to hold `Bearer y2g_...` rather than the key. Users who upload add
-  a `[mcp_servers.yes2sdk]` entry with `bearer_token_env_var = "YES2_API_KEY"` to
-  `~/.codex/config.toml`, which takes the place of the plugin's entry; the README and
-  `yes2sdk-upload` give the snippet.
+- `.mcp.json` sends the key with `"env_http_headers": { "X-Yes2-Api-Key":
+  "YES2_API_KEY" }`; the server takes the bare key in that header. Codex documents
+  `env_http_headers` only for `config.toml`, but accepts it in a plugin's MCP file
+  (verified end to end on CLI 0.156.1) and skips the header when the variable is unset,
+  so the docs tools still start without a key. Never use `bearer_token_env_var` here:
+  an unset variable stops the server from starting at all. The validator rejects it,
+  and CI checks the installed plugin still carries the header mapping.
 - SDK naming taught to users: Defold `yes2sdk.*` (Lua), Unity `Yes2SDK.Yes2SDK.*` (C#),
   JS `Yes2SDK.*` on `window.Yes2SDK`, with the `@yes2games/js` package for helpers,
   types and the mock. On JS the SDK itself is never installed or bundled (the

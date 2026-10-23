@@ -23,16 +23,18 @@ tools in the `yes2sdk` MCP.
   prints or asks for the key.
 - `list_games`, `create_game`, `prepare_upload`, `finalize_upload` and
   `get_build_status` in the README coverage table (16 tools) and in `AGENTS.md`.
-- README section on setting `YES2_API_KEY` and the `~/.codex/config.toml` entry that
-  sends it (`bearer_token_env_var`).
+- `.mcp.json` sends `YES2_API_KEY` as the `X-Yes2-Api-Key` header through
+  `env_http_headers`. Users export the variable and restart Codex; no `config.toml`
+  entry is needed. Codex skips the header when the variable is unset, so the docs and
+  validation tools work without a key. `env_http_headers` is documented for
+  `config.toml` only, but Codex accepts it in a plugin's MCP file, verified end to end
+  on CLI 0.156.1.
+- README section on setting `YES2_API_KEY`.
+- `validate-plugin.mjs` rejects `bearer_token_env_var` and `bearer_token` in
+  `.mcp.json`, and the CI install test checks the installed plugin still carries the
+  `X-Yes2-Api-Key` mapping.
 - Upload in the listing's long description, the 0.4.0 release note, and the dashboard
   tools' hints in `docs/directory-submission.md`.
-
-### Unchanged on purpose
-
-- `.mcp.json` still registers the server with no auth. Codex documents only `type`,
-  `url` and OAuth for a plugin's MCP file, and `bearer_token_env_var` there would stop
-  the server from starting for every user without the variable, docs tools included.
 
 ## [0.3.0] - 2026-10-23
 
