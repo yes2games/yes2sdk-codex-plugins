@@ -149,6 +149,18 @@ if (mcp) {
   const srv = mcp.mcpServers?.yes2sdk;
   if (!srv) fail(".mcp.json: missing mcpServers.yes2sdk");
   else if (!srv.type || !srv.url) fail('.mcp.json: mcpServers.yes2sdk needs "type" and "url"');
+  // The key goes in env_http_headers, which Codex skips when the variable is unset. A
+  // bearer_token_env_var here would stop the server from starting for every user without
+  // the variable, docs tools included, and a bearer_token would ship a secret.
+  for (const k of ["bearer_token_env_var", "bearer_token"]) {
+    if (srv && k in srv) fail(`.mcp.json: mcpServers.yes2sdk must not set "${k}"; send the key through env_http_headers`);
+  }
+  if (srv?.env_http_headers !== undefined) {
+    const h = srv.env_http_headers;
+    if (!h || typeof h !== "object" || Array.isArray(h) || Object.values(h).some((v) => typeof v !== "string")) {
+      fail(".mcp.json: mcpServers.yes2sdk.env_http_headers must map header names to env var names");
+    }
+  }
 }
 
 // 5. Skills.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Upload build"
+  short_description: "Upload a built game to the Yes2 dashboard"
+  default_prompt: "Use $yes2sdk-upload to upload my build in ./dist to the Yes2 dashboard."
+
+policy:
+  allow_implicit_invocation: false

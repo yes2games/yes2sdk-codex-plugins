@@ -33,6 +33,18 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   `validate_integration` gets `indexHtml`/`fileList`/`jsContents`, not `buildPath`.
 - Adding a tool to the server means adding it to a skill and to the README coverage
   table.
+- The five dashboard tools (`list_games`, `create_game`, `prepare_upload`,
+  `finalize_upload`, `get_build_status`) act with the user's own API key and are
+  fronted by `yes2sdk-upload`. Without a key they return setup steps, so the presence
+  check is a call to `list_games`, never a look at the variable. No skill may print,
+  echo or `grep` the key, put it in a command, or ask the user to paste it.
+- `.mcp.json` sends the key with `"env_http_headers": { "X-Yes2-Api-Key":
+  "YES2_API_KEY" }`; the server takes the bare key in that header. Codex documents
+  `env_http_headers` only for `config.toml`, but accepts it in a plugin's MCP file
+  (verified end to end on CLI 0.156.1) and skips the header when the variable is unset,
+  so the docs tools still start without a key. Never use `bearer_token_env_var` here:
+  an unset variable stops the server from starting at all. The validator rejects it,
+  and CI checks the installed plugin still carries the header mapping.
 - SDK naming taught to users: Defold `yes2sdk.*` (Lua), Unity `Yes2SDK.Yes2SDK.*` (C#),
   JS `Yes2SDK.*` on `window.Yes2SDK`, with the `@yes2games/js` package for helpers,
   types and the mock. On JS the SDK itself is never installed or bundled (the

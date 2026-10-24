@@ -39,3 +39,7 @@ jobs:
           done
           codex mcp list | tee mcp.txt
           grep -q 'yes2sdk .*https://mcp.yes2games.com/mcp' mcp.txt || { echo "::error::yes2sdk MCP server was not registered"; exit 1; }
+          # The upload key rides on env_http_headers, a field Codex accepts in a plugin
+          # .mcp.json without documenting it there. Fail if a CLI bump stops carrying it.
+          codex mcp get yes2sdk | tee mcp-get.txt
+          grep -q 'env_http_headers: X-Yes2-Api-Key=YES2_API_KEY' mcp-get.txt || { echo "::error::yes2sdk env_http_headers (X-Yes2-Api-Key) did not survive install"; exit 1; }
