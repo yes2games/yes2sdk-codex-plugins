@@ -28,11 +28,35 @@ You can also install from the Codex app's plugin browser once the marketplace is
 This registers the `yes2sdk` MCP server (remote HTTP, `https://mcp.yes2games.com/mcp`)
 and adds the skills below.
 
-## Dashboard API key (for the dashboard tools only)
+## Sign in to the dashboard (for the dashboard tools only)
 
-Everything except the dashboard tools works with no key. To upload builds to the Yes2
-dashboard with `$yes2sdk-upload`, or to edit a game there, give Codex your own dashboard
-API key:
+Everything except the dashboard tools works without signing in. To upload builds to the
+Yes2 dashboard with `$yes2sdk-upload`, or to edit a game there, sign in once with your
+dashboard account:
+
+```bash
+codex mcp login yes2sdk
+```
+
+Your browser opens the dashboard; log in if needed. The approval page shows which app is
+asking, the account it will act as (your studio and role, or your personal games on a
+preview account) and what it may do: see your games and builds, create and edit games,
+upload builds. It cannot publish, download builds, or see analytics, revenue or your
+team. Approve, then go back to Codex. If a dashboard tool says you need to sign in, run
+the same command.
+
+Codex keeps the sign-in and refreshes it on its own. To disconnect it, open the dashboard
+(avatar > **Settings > Connected apps**) and **Revoke** it, or run
+`codex mcp logout yes2sdk`.
+
+Sign-in needs an owner, manager or developer seat in a studio, or a preview account with
+no studio yet. A preview account works with its usual limits (3 games, 1 build each until
+the account is verified), and the tools say so when you reach one.
+
+### API key (optional, for CI and headless use)
+
+Where nobody can approve in a browser, give Codex a dashboard API key instead. It is
+still supported through `env_http_headers`:
 
 1. Create a key on the dashboard: a personal key under your avatar, **Settings >
    Personal API keys**, or a team key from the **Team** page.
@@ -57,8 +81,8 @@ file. Codex accepts it there anyway; this was verified end to end on Codex CLI 0
 (unset: the server starts and no header is sent; set: the header arrives), and CI
 checks that the installed plugin still carries it.
 
-Without a key the dashboard tools answer with these setup steps. Codex never needs to see
-the key, so do not paste it into the chat.
+Without a key or a sign-in the dashboard tools ask you to sign in. Codex never needs to
+see the key, so do not paste it into the chat.
 
 Uploading puts a build on the dashboard, where you can open it in the Inspector. It
 does not publish anything: publishing to platforms is requested on the dashboard and
@@ -77,7 +101,7 @@ skill name, or run `/skills`.
 | `yes2sdk-diagnose` | Routes a symptom, a failed rule id or a "does this platform support X" question to the right tool. | *"The rewarded ad plays but the reward never lands."* |
 | `yes2sdk-platform-rules` | Cross-platform rules for any integration or compliance work, deferring to the MCP for the authoritative rule set. | *"What breaks if I ship this to Yandex and Poki?"* |
 | `yes2sdk-docs` | Searches the Yes2SDK docs. | *"$yes2sdk-docs rewarded ad callbacks"* |
-| `yes2sdk-upload` | Uploads a build to the Yes2 dashboard with your API key: picks or creates the game, builds a JS/TS project, zips the build with `index.html` at the root, uploads it, waits for processing and returns the Inspector link and any upload warnings. Asks before reserving a version. It uploads, so it only runs when you ask for it by name. | *"$yes2sdk-upload ./dist"* |
+| `yes2sdk-upload` | Uploads a build to the Yes2 dashboard as you (sign in with `codex mcp login yes2sdk`, or use an API key): picks or creates the game, builds a JS/TS project, zips the build with `index.html` at the root, uploads it, waits for processing and returns the Inspector link and any upload warnings. Asks before reserving a version. It uploads, so it only runs when you ask for it by name. | *"$yes2sdk-upload ./dist"* |
 
 `yes2sdk-verify` takes the path to your **extracted** WebGL/HTML5 build; if you leave it
 off it asks once. On a JavaScript/TypeScript project it builds first with your Vite
@@ -87,7 +111,7 @@ universal rules, so the report lists Jest's manual launch checklist as not yet c
 
 ## MCP tool coverage
 
-All 19 `yes2sdk` MCP tools are reachable:
+All 20 `yes2sdk` MCP tools are reachable:
 
 | Tool | Fronted by |
 |---|---|
@@ -109,14 +133,15 @@ All 19 `yes2sdk` MCP tools are reachable:
 | `get_build_status` | `yes2sdk-upload` |
 | `update_game` | `yes2sdk-upload` (on request) |
 | `set_game_image` | `yes2sdk-upload` (on request) |
+| `finalize_image_upload` | `yes2sdk-upload` (on request) |
 | `rename_build` | `yes2sdk-upload` (on request) |
 
-The last eight are the dashboard tools. They need your API key (see
-[Dashboard API key](#dashboard-api-key-for-the-dashboard-tools-only)); without it they
-return setup steps and call nothing. The last three edit a game's profile or rename a
-build, and the skill offers them only when you ask. `set_game_image` returns a `curl`
-command that sends the image from your machine and reads `$YES2_API_KEY` from your
-shell, so neither the image nor the key passes through the chat or the MCP.
+The last nine are the dashboard tools. They need you to sign in, or an API key (see
+[Sign in to the dashboard](#sign-in-to-the-dashboard-for-the-dashboard-tools-only)).
+The last four edit a game's profile or rename a build, and the skill offers them only
+when you ask. `set_game_image` returns a `curl` PUT that sends the image from your
+machine straight to storage with no credential in it, and `finalize_image_upload` then
+sets it, so the image never passes through the chat or the MCP.
 
 The server's MCP prompts (`integrate_module`, `setup_new_project`) and resources
 (`yes2sdk://modules`, `yes2sdk://docs/{module}`) are not wrapped in a skill. Any MCP
@@ -140,7 +165,8 @@ Built against `yes2sdk` MCP server **0.3.2**, expecting `>=0.3.2 <1.0.0`. The ho
 server is upgraded in place, so no action is normally needed.
 
 The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
-`get_build_status`, `update_game`, `set_game_image`, `rename_build`) are newer than
+`get_build_status`, `update_game`, `set_game_image`, `finalize_image_upload`,
+`rename_build`) and sign-in are newer than
 that version. On a server without them,
 `yes2sdk-upload` stops at its first step because `yes2sdk:list_games` does not exist.
 
@@ -161,7 +187,8 @@ To use a local server, point the `yes2sdk` name at it in `~/.codex/config.toml`,
 example `http://127.0.0.1:8091/mcp`. The skills work against any server named `yes2sdk`.
 Your entry replaces the plugin's, so for uploads give it the header too:
 `env_http_headers = { "X-Yes2-Api-Key" = "YES2_API_KEY" }` (local HTTP), or forward the
-variable with `env_vars = ["YES2_API_KEY"]` (stdio).
+variable with `env_vars = ["YES2_API_KEY"]` (stdio). A local server does not offer
+sign-in.
 
 ## Contributing
 
