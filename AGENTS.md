@@ -33,11 +33,14 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   `validate_integration` gets `indexHtml`/`fileList`/`jsContents`, not `buildPath`.
 - Adding a tool to the server means adding it to a skill and to the README coverage
   table.
-- The five dashboard tools (`list_games`, `create_game`, `prepare_upload`,
-  `finalize_upload`, `get_build_status`) act with the user's own API key and are
-  fronted by `yes2sdk-upload`. Without a key they return setup steps, so the presence
+- The eight dashboard tools (`list_games`, `create_game`, `prepare_upload`,
+  `finalize_upload`, `get_build_status`, and `update_game`, `set_game_image`,
+  `rename_build`, which the skill offers only on request) act with the user's own API
+  key and are fronted by `yes2sdk-upload`. Without a key they return setup steps, so the presence
   check is a call to `list_games`, never a look at the variable. No skill may print,
   echo or `grep` the key, put it in a command, or ask the user to paste it.
+  `set_game_image` returns a `curl` whose header reads the literal `$YES2_API_KEY` from
+  the user's shell; run it as returned and never substitute the value.
 - `.mcp.json` sends the key with `"env_http_headers": { "X-Yes2-Api-Key":
   "YES2_API_KEY" }`; the server takes the bare key in that header. Codex documents
   `env_http_headers` only for `config.toml`, but accepts it in a plugin's MCP file

@@ -4,6 +4,20 @@ All notable changes to this plugin. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `update_game`, `set_game_image` and `rename_build` in the README coverage table
+  (19 tools), `AGENTS.md` and `docs/directory-submission.md`. After a build is ready,
+  `yes2sdk-upload` can offer to rename it or edit the game's details, icon or banner,
+  only when the user asks. `set_game_image` returns a `curl` command that reads
+  `$YES2_API_KEY` from the user's shell, and the skill runs it as given.
+
+### Changed
+
+- The README's API key section now covers all dashboard tools, not only uploads.
+
 ## [0.4.0] - 2026-10-23
 
 Adds uploading a build to the Yes2 dashboard, through the authenticated dashboard

@@ -17,7 +17,7 @@ actually did.
 | Support | https://developer.yes2games.com (email: developer.support@yes2games.com) |
 | Privacy policy | https://developer.yes2games.com/privacy-policy |
 | Terms of service | https://developer.yes2games.com/terms |
-| MCP server | https://mcp.yes2games.com/mcp (the 11 docs and validation tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`; once yes2sdk-mcp#103 is deployed, the 5 dashboard tools carry `destructiveHint: false`, `openWorldHint: true`, and `readOnlyHint: true` only on `list_games` and `get_build_status`) |
+| MCP server | https://mcp.yes2games.com/mcp (the 11 docs and validation tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`; once yes2sdk-mcp#103 is deployed, the 8 dashboard tools carry `openWorldHint: true`, `readOnlyHint: true` only on `list_games` and `get_build_status`, and `destructiveHint: true` only on `set_game_image`) |
 | Logo and icon | `assets/logo.png` (512x512 PNG) |
 | Starter prompts | the three in `.codex-plugin/plugin.json` `interface.defaultPrompt` |
 
@@ -30,10 +30,12 @@ The hosted server has no disk access; `detect_sdk` and `validate_integration` re
 the file contents passed inline in the request.
 
 The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
-`get_build_status`) are the exception. They call the Yes2 dashboard API with the user's
+`get_build_status`, `update_game`, `set_game_image`, `rename_build`) are the exception. They call the Yes2 dashboard API with the user's
 own API key (sent as `X-Yes2-Api-Key` from the `YES2_API_KEY` env var), so they are open-world, and `create_game`, `prepare_upload` and
 `finalize_upload` change the studio's data on the dashboard (a new game, a reserved
-version, a registered build). None deletes or overwrites anything. Without a key they
+version, a registered build). `update_game` and `rename_build` overwrite a game's
+details or a build's display name. `set_game_image` replaces an icon or banner, and with
+`remove: true` deletes it, so it is the one tool marked destructive. Without a key they
 return setup steps and call nothing. The test cases below do not cover them, since a
 reviewer has no dashboard key; the upload skill only runs when asked for by name.
 
