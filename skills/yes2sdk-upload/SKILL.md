@@ -87,3 +87,18 @@ machine straight to storage.
     `bundleErrors` entry as returned. Warnings do not block the build but may block a
     platform review. End with the reminder that the build is on the dashboard only;
     publishing to platforms is requested on the dashboard and done by an admin.
+
+## After the build is ready (only when the user asks)
+
+Do not call these unprompted; mention them once at most, after the report.
+
+- `yes2sdk:rename_build` with `gameId`, `buildId` and `name` gives the build a display
+  name; `null` clears it back to the zip file name.
+- `yes2sdk:update_game` with `gameId` and only the fields the user wants changed
+  (name, description, engine, category, tags, orientation and the like) edits the game
+  profile.
+- `yes2sdk:set_game_image` with `gameId`, `kind` (`icon` or `banner`) and the image's
+  absolute path as `imagePath` returns a `curl` command. Run it **exactly as given**:
+  it reads `$YES2_API_KEY` from the user's shell, so never replace that with the
+  value, and the image goes from the user's machine straight to the dashboard.
+  `remove: true` deletes the image instead, so confirm with the user first.
