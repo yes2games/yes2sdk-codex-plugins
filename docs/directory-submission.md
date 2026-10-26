@@ -17,7 +17,7 @@ actually did.
 | Support | https://developer.yes2games.com (email: developer.support@yes2games.com) |
 | Privacy policy | https://developer.yes2games.com/privacy-policy |
 | Terms of service | https://developer.yes2games.com/terms |
-| MCP server | https://mcp.yes2games.com/mcp (the 11 docs and validation tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`; once yes2sdk-mcp#103 is deployed, the 9 dashboard tools carry `openWorldHint: true`, `readOnlyHint: true` only on `list_games` and `get_build_status`, and `destructiveHint: true` only on `set_game_image`) |
+| MCP server | https://mcp.yes2games.com/mcp (the 11 docs and validation tools carry `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`; once yes2sdk-mcp#103 is deployed, the 10 dashboard tools carry `openWorldHint: true`, `readOnlyHint: true` only on `list_games` and `get_build_status`, and `destructiveHint: true` only on `set_game_image`) |
 | Logo and icon | `assets/logo.png` (512x512 PNG) |
 | Starter prompts | the three in `.codex-plugin/plugin.json` `interface.defaultPrompt` |
 
@@ -29,15 +29,15 @@ systems on the user's behalf, so all are read-only, non-destructive and closed-w
 The hosted server has no disk access; `detect_sdk` and `validate_integration` read only
 the file contents passed inline in the request.
 
-The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
+The dashboard tools (`sign_in`, `list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
 `get_build_status`, `update_game`, `set_game_image`, `finalize_image_upload`, `rename_build`) are the exception. They call the Yes2 dashboard API as the user,
-signed in through `codex mcp login yes2sdk` or with their own API key (sent as `X-Yes2-Api-Key` from the `YES2_API_KEY` env var), so they are open-world, and `create_game`, `prepare_upload` and
+signed in (opt-in, through `sign_in` or `codex mcp login yes2sdk`) or with their own API key (sent as `X-Yes2-Api-Key` from the `YES2_API_KEY` env var), so they are open-world, and `create_game`, `prepare_upload` and
 `finalize_upload` change the studio's data on the dashboard (a new game, a reserved
 version, a registered build). `update_game` and `rename_build` overwrite a game's
 details or a build's display name. `set_game_image` replaces an icon or banner, and with
 `remove: true` deletes it, so it is the one tool marked destructive;
 `finalize_image_upload` then stores the uploaded image. Without a sign-in or a key they
-ask the user to sign in and call nothing. The test cases below do not cover them, since a
+reply that the user is not signed in and call nothing. The test cases below do not cover them, since a
 reviewer has no dashboard account; the upload skill only runs when asked for by name.
 
 ## Positive test cases
@@ -121,8 +121,8 @@ reviewer has no dashboard account; the upload skill only runs when asked for by 
 
 0.5.0:
 
-> Sign in to the Yes2 dashboard with `codex mcp login yes2sdk` instead of setting an API
-> key; the key stays supported for CI and headless use. After an upload,
+> Sign in to the Yes2 dashboard, opt-in, with `codex mcp login yes2sdk` or by asking to
+> "sign in to Yes2", instead of setting an API key; the key stays supported for CI and headless use. After an upload,
 > `yes2sdk-upload` can also edit the game's details, icon or banner and rename the
 > build, when asked.
 

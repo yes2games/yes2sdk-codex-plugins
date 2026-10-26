@@ -30,19 +30,23 @@ and adds the skills below.
 
 ## Sign in to the dashboard (for the dashboard tools only)
 
-Everything except the dashboard tools works without signing in. To upload builds to the
-Yes2 dashboard with `$yes2sdk-upload`, or to edit a game there, sign in once with your
-dashboard account:
+Signing in is opt-in, and only the dashboard tools need it: the docs, rules and
+validation tools never do. Until you sign in, a dashboard tool just replies that you're
+not signed in. To upload builds to the Yes2 dashboard with `$yes2sdk-upload`, or to edit
+a game there, sign in once with your dashboard account:
 
 ```bash
 codex mcp login yes2sdk
 ```
 
+You can also ask Codex to "sign in to Yes2", which calls the `sign_in` tool; once you're
+signed in, the same tool reports the account and studio in use.
+
 Your browser opens the dashboard; log in if needed. The approval page shows which app is
 asking, the account it will act as (your studio and role, or your personal games on a
 preview account) and what it may do: see your games and builds, create and edit games,
 upload builds. It cannot publish, download builds, or see analytics, revenue or your
-team. Approve, then go back to Codex. If a dashboard tool says you need to sign in, run
+team. Approve, then go back to Codex. If a dashboard tool says you're not signed in, run
 the same command.
 
 Codex keeps the sign-in and refreshes it on its own. To disconnect it, open the dashboard
@@ -81,7 +85,7 @@ file. Codex accepts it there anyway; this was verified end to end on Codex CLI 0
 (unset: the server starts and no header is sent; set: the header arrives), and CI
 checks that the installed plugin still carries it.
 
-Without a key or a sign-in the dashboard tools ask you to sign in. Codex never needs to
+Without a key or a sign-in the dashboard tools reply that you're not signed in. Codex never needs to
 see the key, so do not paste it into the chat.
 
 Uploading puts a build on the dashboard, where you can open it in the Inspector. It
@@ -111,7 +115,7 @@ universal rules, so the report lists Jest's manual launch checklist as not yet c
 
 ## MCP tool coverage
 
-All 20 `yes2sdk` MCP tools are reachable:
+All 21 `yes2sdk` MCP tools are reachable:
 
 | Tool | Fronted by |
 |---|---|
@@ -126,6 +130,7 @@ All 20 `yes2sdk` MCP tools are reachable:
 | `troubleshoot` | `yes2sdk-diagnose` |
 | `get_platform_capabilities` | `yes2sdk-diagnose` |
 | `list_sdk_modules` | `yes2sdk-diagnose` |
+| `sign_in` | `yes2sdk-upload` |
 | `list_games` | `yes2sdk-upload` |
 | `create_game` | `yes2sdk-upload` |
 | `prepare_upload` | `yes2sdk-upload` |
@@ -136,7 +141,7 @@ All 20 `yes2sdk` MCP tools are reachable:
 | `finalize_image_upload` | `yes2sdk-upload` (on request) |
 | `rename_build` | `yes2sdk-upload` (on request) |
 
-The last nine are the dashboard tools. They need you to sign in, or an API key (see
+The last ten are the dashboard tools, `sign_in` first. The rest need you to sign in, or an API key (see
 [Sign in to the dashboard](#sign-in-to-the-dashboard-for-the-dashboard-tools-only)).
 The last four edit a game's profile or rename a build, and the skill offers them only
 when you ask. `set_game_image` returns a `curl` PUT that sends the image from your
@@ -166,7 +171,7 @@ server is upgraded in place, so no action is normally needed.
 
 The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
 `get_build_status`, `update_game`, `set_game_image`, `finalize_image_upload`,
-`rename_build`) and sign-in are newer than
+`rename_build`) and `sign_in` are newer than
 that version. On a server without them,
 `yes2sdk-upload` stops at its first step because `yes2sdk:list_games` does not exist.
 

@@ -33,12 +33,13 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   `validate_integration` gets `indexHtml`/`fileList`/`jsContents`, not `buildPath`.
 - Adding a tool to the server means adding it to a skill and to the README coverage
   table.
-- The nine dashboard tools (`list_games`, `create_game`, `prepare_upload`,
+- The dashboard tools (`sign_in`, `list_games`, `create_game`, `prepare_upload`,
   `finalize_upload`, `get_build_status`, and `update_game`, `set_game_image`,
   `finalize_image_upload`, `rename_build`, which the skill offers only on request) act
-  as the user, signed in with `codex mcp login yes2sdk` (the default) or with the
-  optional API key, and are fronted by `yes2sdk-upload`. Without either they ask the
-  user to sign in, so the presence check is a call to `list_games`, never a look at the
+  as the user, signed in (opt-in: `sign_in` or `codex mcp login yes2sdk`) or with the
+  optional API key, and are fronted by `yes2sdk-upload`. Without either they reply that
+  the user is not signed in (a normal tool result, never a 401), and the skill then calls
+  `sign_in`, so the presence check is a call to `list_games`, never a look at the
   variable. No skill may print, echo or `grep` the key, put it in a command, or ask the
   user to paste a key or token. `set_game_image` returns a `curl` PUT to a presigned URL
   with no credential in it; run it as returned, then call `finalize_image_upload`.

@@ -13,8 +13,11 @@ a Yes2Games admin reviews and publishes). Say so in the final report.
 The plugin wraps the `yes2sdk` MCP, which does the real work. The dashboard tools act
 as the user, in one of two ways:
 
-- **Sign-in (the default).** The user runs `codex mcp login yes2sdk` once in a
-  terminal and approves in the browser; Codex then sends the resulting token itself.
+- **Sign-in (the default, opt-in).** Calling `yes2sdk:sign_in` starts the sign-in, or
+  the user runs `codex mcp login yes2sdk` once in a terminal; they approve in the
+  browser and Codex then sends the resulting token itself. Until then the dashboard
+  tools just reply that the user is not signed in; the docs and validation tools
+  never need sign-in.
 - **An API key (optional, for CI and headless use).** If `YES2_API_KEY` is set, the
   plugin's `.mcp.json` sends it as the `X-Yes2-Api-Key` header through
   `env_http_headers`; unset, Codex leaves the header out.
@@ -27,7 +30,7 @@ user's machine straight to storage.
 
 - Sign-in happens in the user's browser. Never ask for a password, a code or a token,
   and never try to complete the sign-in yourself. `codex mcp login` is for the user to
-  run in their own terminal.
+  run in their own terminal; `yes2sdk:sign_in` is the only call you make for it.
 - Never print, echo, `cat`, `grep` or `env`-dump `YES2_API_KEY`, and never put it in
   a command, a file or a commit. Nothing in this procedure needs its value: Codex
   sends it.
@@ -39,20 +42,20 @@ user's machine straight to storage.
 ## Procedure
 
 1. **Check the sign-in.** Call `yes2sdk:list_games`.
-   - **Sign-in required.** If the call fails because the `yes2sdk` server needs the
-     user to sign in (an unauthorized error, or an answer naming
-     `codex mcp login yes2sdk`), or it answers with setup steps, stop and tell the
-     user: run `codex mcp login yes2sdk` in a terminal and approve in the browser
-     that opens. The approval page shows the account Codex will act as: their studio,
-     or their personal games on a preview account. Then wait for them and call
+   - **Not signed in.** If it replies that the user is not signed in to Yes2, call
+     `yes2sdk:sign_in` to start the sign-in. If Codex does not open a browser for it,
+     tell the user to run `codex mcp login yes2sdk` in a terminal. Either way they
+     approve in the browser (the page shows the account Codex will act as: their
+     studio, or their personal games on a preview account); wait for them, then call
      `yes2sdk:list_games` again. Only the dashboard tools need this; the docs and
      validation tools keep working.
    - **`INVALID_API_KEY` or a sign-in that stopped working.** If they use a key, it
      was revoked or mistyped: create a new one. If they signed in, the connection was
-     revoked or expired, or their seat changed: run `codex mcp login yes2sdk` again.
+     revoked or expired, or their seat changed: call `yes2sdk:sign_in` again, or run
+     `codex mcp login yes2sdk`.
    - **`INSUFFICIENT_SCOPE`.** The credential lacks a permission this procedure
-     needs. Ask them to sign in again with `codex mcp login yes2sdk` and approve every
-     permission, or to use a key with all scopes.
+     needs. Ask them to sign in again (`yes2sdk:sign_in` or `codex mcp login yes2sdk`)
+     and approve every permission, or to use a key with all scopes.
    - **No browser (CI, a remote shell).** Offer the key instead:
      - Create a key on the dashboard: a personal key under avatar, **Settings >
        Personal API keys**, or a team key from the **Team** page. Copy it.
