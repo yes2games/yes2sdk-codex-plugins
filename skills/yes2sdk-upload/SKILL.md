@@ -71,9 +71,10 @@ user's machine straight to storage.
    name the user gives; `vanilla` is the engine for any JavaScript/TypeScript game
    (plain JS, Phaser, three.js). `create_game` makes a new game every call, so never
    call it for a game already listed. Keep the `gameId`. A preview account (no studio
-   yet) works with its personal games: `game_limit_reached` means it already has the
-   most games it may (3 by default) until the account is verified, so offer to upload
-   to one of the listed games instead.
+   yet) works with its personal games: unlimited games; one build per game, and a new
+   upload replaces the previous one unless that build is in review or live.
+   `game_limit_reached` only comes from a limit an admin set on that account: say so
+   and offer to upload to one of the listed games instead.
 3. **Get the build folder.** The user may have given a path; it must be the folder
    that holds the built `index.html`.
    - JavaScript/TypeScript (Vite): run `npm run build` and use the output folder,
@@ -96,13 +97,21 @@ user's machine straight to storage.
 7. **Pick the version.** Default to `version` in `package.json`, else the latest git
    tag (`git describe --tags --abbrev=0`). If neither exists or it is unclear, ask.
    Then confirm the game, version and zip with the user before going on, because the
-   next call reserves that version.
+   next call reserves that version. On a preview account (signed in to its personal
+   games, not a studio), also tell the user that this upload replaces the game's
+   current build and its Inspector results.
 8. **Prepare.** Call `yes2sdk:prepare_upload` with `gameId`, `version`, `size`, the
    zip's absolute path as `zipPath`, and `notes` if the user gave release notes.
    `VERSION_EXISTS` means the game already has that version: propose the next one
-   (bump the last number) and ask before retrying. `build_limit_reached` means a
-   preview account's game already holds its builds (1 by default) until the account
-   is verified: say so and stop. Pass every other error through as returned.
+   (bump the last number) and ask before retrying. On a preview account the version
+   of the build being replaced may be reused. `UPLOAD_ALREADY_OPEN` means this game
+   already has an upload that is pending or processing (a preview game may have only
+   one open at a time): finish that one (its `curl`, `finalize_upload`, then
+   `get_build_status`) or wait up to 60 minutes for it to expire, then prepare again.
+   `build_protected` means the game's current build is in admin review or live, so it
+   can't be replaced until the review ends: say so and stop. `build_limit_reached`
+   means an admin set that account's build limit to 0: say so and stop. Pass every
+   other error through as returned.
 9. **Upload.** Run the `curl` command it returned **exactly as given**: do not edit
    it, add headers or change the URL. An empty response means the zip landed. An XML
    error body means it did not, usually a size mismatch or an expired URL: re-measure
@@ -112,7 +121,9 @@ user's machine straight to storage.
     `uploadId` about every 5 seconds until the status is `ready` or `failed`. Keep
     going while it says `processing`; a large build can take a couple of minutes
     before it reports `failed`. On `SDK_NOT_INTEGRATED`, uploading the same zip again
-    fails the same way, so offer `$yes2sdk-verify` to find what is missing.
+    fails the same way, so offer `$yes2sdk-verify` to find what is missing. On
+    `build_protected`, the game's current build went into admin review or live
+    meanwhile, so nothing was replaced: say so and stop.
 12. **Report.** On `ready`: the game, version and build id, the `inspectorUrl` as a
     link the user can open to play and QA the build, and every `uploadWarnings` and
     `bundleErrors` entry as returned. Warnings do not block the build but may block a

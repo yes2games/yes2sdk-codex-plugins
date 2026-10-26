@@ -27,7 +27,10 @@ Needs the MCP's opt-in sign-in (yes2sdk-mcp#110) and the dashboard's OAuth sign-
   details, icon or banner, only when the user asks.
 - `yes2sdk-upload` handles a not-signed-in reply (call `sign_in`, or have the user run
   `codex mcp login yes2sdk`, then retry), `INSUFFICIENT_SCOPE`, and a preview account's
-  `game_limit_reached` and `build_limit_reached`.
+  upload errors: `UPLOAD_ALREADY_OPEN`, `build_protected`, `game_limit_reached` and
+  `build_limit_reached`. It tells a preview account that its upload replaces the game's
+  current build (preview accounts: unlimited games; one build per game, and a new upload
+  replaces the previous one unless that build is in review or live).
 
 ### Changed
 
