@@ -33,15 +33,17 @@ dependency-free validator (`scripts/validate-plugin.mjs`).
   `validate_integration` gets `indexHtml`/`fileList`/`jsContents`, not `buildPath`.
 - Adding a tool to the server means adding it to a skill and to the README coverage
   table.
-- The eight dashboard tools (`list_games`, `create_game`, `prepare_upload`,
+- The dashboard tools (`sign_in`, `list_games`, `create_game`, `prepare_upload`,
   `finalize_upload`, `get_build_status`, and `update_game`, `set_game_image`,
-  `rename_build`, which the skill offers only on request) act with the user's own API
-  key and are fronted by `yes2sdk-upload`. Without a key they return setup steps, so the presence
-  check is a call to `list_games`, never a look at the variable. No skill may print,
-  echo or `grep` the key, put it in a command, or ask the user to paste it.
-  `set_game_image` returns a `curl` whose header reads the literal `$YES2_API_KEY` from
-  the user's shell; run it as returned and never substitute the value.
-- `.mcp.json` sends the key with `"env_http_headers": { "X-Yes2-Api-Key":
+  `finalize_image_upload`, `rename_build`, which the skill offers only on request) act
+  as the user, signed in (opt-in: `sign_in` or `codex mcp login yes2sdk`) or with the
+  optional API key, and are fronted by `yes2sdk-upload`. Without either they reply that
+  the user is not signed in (a normal tool result, never a 401), and the skill then calls
+  `sign_in`, so the presence check is a call to `list_games`, never a look at the
+  variable. No skill may print, echo or `grep` the key, put it in a command, or ask the
+  user to paste a key or token. `set_game_image` returns a `curl` PUT to a presigned URL
+  with no credential in it; run it as returned, then call `finalize_image_upload`.
+- `.mcp.json` sends the optional key with `"env_http_headers": { "X-Yes2-Api-Key":
   "YES2_API_KEY" }`; the server takes the bare key in that header. Codex documents
   `env_http_headers` only for `config.toml`, but accepts it in a plugin's MCP file
   (verified end to end on CLI 0.156.1) and skips the header when the variable is unset,
