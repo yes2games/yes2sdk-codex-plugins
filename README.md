@@ -167,13 +167,14 @@ detection. `yes2sdk-integrate` follows both rather than restating them, and
 
 ### MCP server version
 
-Built against `yes2sdk` MCP server **0.3.2**, expecting `>=0.3.2 <1.0.0`. The hosted
+Built against `yes2sdk` MCP server **0.4.0**, expecting `>=0.4.0 <1.0.0`. The hosted
 server is upgraded in place, so no action is normally needed.
 
 The dashboard tools (`list_games`, `create_game`, `prepare_upload`, `finalize_upload`,
 `get_build_status`, `update_game`, `set_game_image`, `finalize_image_upload`,
-`rename_build`) and `sign_in` are newer than
-that version. On a server without them,
+`rename_build`) first shipped on npm in 0.4.0. `sign_in` exists only on the hosted
+server; the local stdio server uses `YES2_API_KEY` instead. On a server without the
+dashboard tools,
 `yes2sdk-upload` stops at its first step because `yes2sdk:list_games` does not exist.
 
 A mismatch shows up as a symptom: a skill fails because an MCP tool is missing or its

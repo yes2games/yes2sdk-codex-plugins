@@ -6,6 +6,11 @@ All notable changes to this plugin. Format follows
 
 ## [Unreleased]
 
+### Changed
+
+- README records MCP server `0.4.0` (`>=0.4.0 <1.0.0`), the first npm release with the
+  dashboard tools.
+
 ## [0.5.0] - 2026-10-26
 
 Sign-in becomes the default way the dashboard tools act as you. It is opt-in: run
